@@ -22,8 +22,20 @@ Route::middleware([
     'web',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
+    'tenant.active',
 ])->group(function () {
     Route::get('/', function () {
-        return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
+        return view('app.welcome');
     });
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+    // Route::resource('tanent',TenantController::class)->middleware(['auth', 'verified']);
+
+    Route::get('/subscribe', function () {
+        return view('subscribe');
+    });
+    require __DIR__.'/tenant-auth.php';
 });

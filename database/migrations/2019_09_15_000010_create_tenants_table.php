@@ -19,10 +19,8 @@ class CreateTenantsTable extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('email');
-
-            $table->string('domain');
-            // your custom columns may go here
-
+            $table->string('password');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->json('data')->nullable();
         });
