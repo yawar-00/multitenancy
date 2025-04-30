@@ -18,6 +18,8 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/tanent';
+    public const HOME2 = 'users';
+
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

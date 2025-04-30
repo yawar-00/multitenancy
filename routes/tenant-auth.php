@@ -1,26 +1,26 @@
 <?php
 
-use App\Http\Controllers\App\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\App\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\App\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\App\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\App\Auth\NewPasswordController;
-use App\Http\Controllers\App\Auth\PasswordController;
-use App\Http\Controllers\App\Auth\PasswordResetLinkController;
-use App\Http\Controllers\App\Auth\RegisteredUserController;
-use App\Http\Controllers\App\Auth\VerifyEmailController;
+use App\Http\Controllers\app\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\app\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\app\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\app\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\app\Auth\NewPasswordController;
+use App\Http\Controllers\app\Auth\PasswordController;
+use App\Http\Controllers\app\Auth\PasswordResetLinkController;
+use App\Http\Controllers\app\Auth\RegisteredUserController;
+use App\Http\Controllers\app\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function (){
+Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login');
+    Route::get('tenantlogin', [AuthenticatedSessionController::class, 'create'])
+                ->name('tenantlogin');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('tenantlogin', [AuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
@@ -54,6 +54,6 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+    Route::post('tenantlogout', [AuthenticatedSessionController::class, 'destroy'])
+                ->name('tenantlogout');
 });
