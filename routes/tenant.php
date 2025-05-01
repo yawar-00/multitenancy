@@ -34,6 +34,9 @@ Route::middleware([
    Route::get('login',function(){
     return view('app.auth.login');
    });
+   Route::get('register',function(){
+    return view('app.auth.register');
+   });
 
 //    Route::get('user',function(){
 //     return view('app.users.index');
