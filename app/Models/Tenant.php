@@ -14,6 +14,7 @@ class Tenant extends BaseTenant implements TenantWithDatabase
         'name',
         'email',
         'password',
+        'type',
     ];
     public static function getCustomColumns(): array
     {

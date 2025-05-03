@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +17,7 @@ use App\Http\Controllers\ProfileController;
 |
 */
 
-Route::get('/', function () {
- 
-    return view('welcome');
-});
+Route::get('/',[SubscriptionController::class,'index']);
 
 Route::resource('tanent',TenantController::class)->middleware(['auth', 'verified']);
 Route::post('tanent/store',[TenantController::class,'store'])->middleware(['auth', 'verified'])->name('tenant.store');
@@ -31,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/subscribe', function () {
-    return view('subscribe');
-});
+
+Route::post('/plancheckout',[PaymentController::class,'payment'])->middleware(['auth', 'verified'])->name('planPayment');
+Route::get('/subscribe', [SubscriptionController::class,'index']);
 require __DIR__.'/auth.php';

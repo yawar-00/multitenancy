@@ -10,6 +10,9 @@
     nav{
         background-color:#bfb771;
     }
+    .guest{
+        color:rgb(119, 119, 113);
+    }
 </style>
 
 <nav x-data="{ open: false }" class="bg-gradient-to-r text-white shadow-lg">
@@ -28,7 +31,7 @@
                 <!-- Navigation Links -->
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="url('home')" :active="request()->is('home')">
+                    <x-nav-link :href="url('/')" :active="request()->is('/')">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>
@@ -37,18 +40,25 @@
                         {{ __('Shop All') }}
                     </x-nav-link>
                 </div>
-                
-                
+                @auth
+                @if(Auth::user()->type!='user')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="url('dashboard')" :active="request()->is('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+                @endif
+                @endauth
             </div>
 
           <!-- Settings Dropdown -->
 @guest
     @if (Route::has('login'))
         <div class='hidden space-x-8 sm:-my-px sm:ms-10 sm:flex' style="margin-top:25px;margin-left:20px">
-            <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
+            <a href="{{ url('tenantlogin') }}" class="guest font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" >Log in</a>
             
             @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
+                <a href="{{ url('tenantregister') }}" class="guest ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Register</a>
             @endif
         </div>
     @endif
@@ -57,9 +67,9 @@
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
                 <button class="flex items-center  text-white px-4 py-2 rounded-lg font-medium shadow-lg  transition" >
-                <i class="fa-solid fa-user" style="color:#a5a59d;margin-right:10px "></i>
-                <div style="color:#a5a59d">{{ Auth::user()->name }}</div>
-                <svg class="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:#a5a59d">
+                <i class="fa-solid fa-user" style="color:#5c5c58;margin-right:10px "></i>
+                <div style="color:#5c5c58">{{ Auth::user()->name }}</div>
+                <svg class="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:#5c5c58">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
             </button>
@@ -74,7 +84,7 @@
                 <form method="POST" action="{{ url('tenantlogout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="url('tenantlogout')"
+                            <x-dropdown-link :href="url('tenantlogout')" class="dropdown"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}

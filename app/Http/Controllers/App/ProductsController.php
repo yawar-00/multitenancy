@@ -104,7 +104,6 @@ class ProductsController extends Controller
         ]);
     
         $product = ProductsModel::findOrFail($id);
-    
         $product->name = $request->name;
         $product->description = $request->description;
         $product->category_id = $request->category;
@@ -155,11 +154,11 @@ class ProductsController extends Controller
         $product = ProductsModel::find($id);
     
         if (!$product) {
-            // Log::error("Product not found with ID: $id");
+            Log::error("Product not found with ID: $id");
             return response()->json(['error' => 'Product not found'], 404);
         }
     
-        // Log::info("Found product: " . $product->name);
+        Log::info("Found product: " . $product->name);
     
         if ($product->image) {
             $imagePath = public_path($product->image);

@@ -32,11 +32,8 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     'tenant.active',
 ])->group(function () {
-    Route::get('/', function () {
-        return view('app.userpage');
-        
-    });
-    Route::get('/home',[FrontendController::class,'index'])->name('Home');
+    
+    Route::get('/',[FrontendController::class,'index'])->name('Home');
     Route::get('/shop',[FrontendController::class,'shop'])->name('Shop');
     Route::get('/shopByCategory/{id}',[FrontendController::class,'shopByCategory']);
     Route::get('/shopProduct/{id}',[FrontendController::class,'shopProduct']);
@@ -56,7 +53,6 @@ Route::middleware([
 //     return view('app.users.index');
 //    });
 
-   Route::resource('users',UserController::class)->middleware(['auth', 'verified']);
    
 //    Route::get('/welcome',function(){
 //     return view('app.userpage');

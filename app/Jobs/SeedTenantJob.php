@@ -2,12 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Models\category;
+use App\Models\{Tenant,User};
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use App\Models\{Tenant,User};
 
 class SeedTenantJob implements ShouldQueue
 {
@@ -32,7 +33,14 @@ class SeedTenantJob implements ShouldQueue
                 'name'=>$this->tenant->name,
                 'email'=>$this->tenant->email,
                 'password'=>$this->tenant->password,
+                
+            ]);
+            $user=User::latest()->first();
+            $user->type='admin';
+            $user->save();
 
+            category::create([
+                'category_name'=>'Electronics',
             ]);
         });
     }

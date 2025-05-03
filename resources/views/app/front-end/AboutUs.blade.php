@@ -1,3 +1,4 @@
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 @extends('app.layout-frontend.master')
 
 @section('content')

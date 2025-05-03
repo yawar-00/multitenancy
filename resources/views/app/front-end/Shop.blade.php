@@ -95,6 +95,7 @@
 
 
 </style>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 <body style="background-color:#ECEFCA">
     @extends('app.layout-frontend.master')
     @section('content')
