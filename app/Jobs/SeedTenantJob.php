@@ -22,7 +22,6 @@ class SeedTenantJob implements ShouldQueue
     {
         $this->tenant= $tenant;
     }
-
     /**
      * Execute the job.
      */
@@ -32,13 +31,11 @@ class SeedTenantJob implements ShouldQueue
             User::create([
                 'name'=>$this->tenant->name,
                 'email'=>$this->tenant->email,
-                'password'=>$this->tenant->password,
-                
+                'password'=>$this->tenant->password,     
             ]);
             $user=User::latest()->first();
             $user->type='admin';
             $user->save();
-
             category::create([
                 'category_name'=>'Electronics',
             ]);

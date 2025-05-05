@@ -31,8 +31,9 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
     'tenant.active',
+    'check.subscription',
 ])->group(function () {
-    
+
     Route::get('/',[FrontendController::class,'index'])->name('Home');
     Route::get('/shop',[FrontendController::class,'shop'])->name('Shop');
     Route::get('/shopByCategory/{id}',[FrontendController::class,'shopByCategory']);
@@ -62,8 +63,9 @@ Route::middleware([
 
 
 
+Route::get('/product-stats', [ProductsController::class, 'getStats']);
 
-Route::middleware(['auth', 'verified'])->group(function(){
+Route::middleware(['admin'])->group(function(){
     Route::prefix('dashboard')->group(function(){
         Route::get('/', [adminController::class, 'index'])->name('AdminDashboard');
         Route::get('/products', [ProductsController::class, 'index'] )->name('products');
@@ -82,8 +84,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
             Route::post('/makeActive/{id}', [BannerController::class, 'makeActive']);
         });
     });
-});
-Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/about-us', [AboutUsController::class, 'list'])->name('admin.about.list');
         Route::get('/about-us/{id}', [AboutUsController::class, 'getOne']);
@@ -92,6 +92,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/about-us/toggle-status/{id}', [AboutUsController::class, 'toggleStatus']);
     });
 });
+
 
    require __DIR__.'/tenant-auth.php';
 

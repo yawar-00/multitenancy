@@ -1,6 +1,12 @@
 @extends('app.layout-backend.master')
 @section('content')
 <div class="container-fluid mt-4">
+@if(session('subscription_warning'))
+<div class="alert alert-warning alert-dismissible fade show text-center fw-bold" role="alert">
+    {{ session('subscription_warning') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
     <div class="row g-4">
         <!-- Card 1 -->
         <div class="col-md-4">

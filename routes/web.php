@@ -19,8 +19,8 @@ use App\Http\Controllers\SubscriptionController;
 
 Route::get('/',[SubscriptionController::class,'index']);
 
-Route::resource('tanent',TenantController::class)->middleware(['auth', 'verified']);
-Route::post('tanent/store',[TenantController::class,'store'])->middleware(['auth', 'verified'])->name('tenant.store');
+Route::resource('tanent',TenantController::class)->middleware(['superadmin']);
+Route::post('tanent/store',[TenantController::class,'store'])->middleware(['superadmin'])->name('tenant.store');
 // Route::get('/dashboard', function () {
 //     return view('tenancy.index');
 // })->middleware(['auth', 'verified'])->name('dashboard');

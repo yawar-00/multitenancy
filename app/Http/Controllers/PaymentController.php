@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plan;
 use Razorpay\Api\Api;
 use App\Models\Tenant;
+use Carbon\Carbon;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Mail\PaymentSuccessMail;
 use Illuminate\Validation\Rules;
@@ -12,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 class PaymentController extends Controller
 {
     public function payment(Request $request){
-        //  dd($request);
+       
         //  $api = new Api(env('rzr_key'),env('rzr_secret'));
         //  $paymentInfo = $api->payment->fetch($request->razorpay_payment_id);
         // we get payment info
@@ -46,7 +49,15 @@ class PaymentController extends Controller
                 'domain' => $validData['domain'].'.'.config('app.domain'),
                 'amount'=>$request->amount,
             ];
-
+            $pid=$request->plan_id;
+            $plan=Plan::findOrFail($pid);
+            tenancy()->initialize($tenant);
+            Subscription::create([
+                'maxProducts'=> $plan->storage_limit,
+                'start_date' => Carbon::now(),
+                'end_date' => Carbon::now()->addDays(30),
+            ]);
+            tenancy()->end();
             Mail::to($tenant->email)->send(new PaymentSuccessMail($tenantData));
 
             dd('Successfully done');

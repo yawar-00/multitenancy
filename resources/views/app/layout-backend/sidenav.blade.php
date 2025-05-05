@@ -102,6 +102,11 @@
     <i class="fa-solid fa-bars" ></i>
     </div> 
     <ul class="nav-links">
+    <li>
+    <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">
+    <i class="fa-solid fa-house"></i><span>Home</span>
+    </a>
+  </li>
   <li>
     <a href="{{ url('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">
       <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>

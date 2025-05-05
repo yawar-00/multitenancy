@@ -24,7 +24,7 @@ class FrontendController extends Controller
    }
    public function shopByCategory($id){
       $products = ProductsModel::where('category_id',$id)->latest()->get();
-      return view('front-end.Shop',compact('products'));
+      return view('app.front-end.Shop',compact('products'));
       
       
    }
