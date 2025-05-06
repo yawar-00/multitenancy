@@ -38,7 +38,7 @@ Route::middleware([
     Route::get('/shop',[FrontendController::class,'shop'])->name('Shop');
     Route::get('/shopByCategory/{id}',[FrontendController::class,'shopByCategory']);
     Route::get('/shopProduct/{id}',[FrontendController::class,'shopProduct']);
-    // Route::get('/about-us', [AboutUsController::class, 'index'])->name('AboutUs');
+    Route::get('/about-us', [AboutUsController::class, 'index']);
     Route::get('/buynow/{id}',[FrontendController::class,'BuyNow'])->middleware(['auth', 'verified']);
     Route::post('/razorpay',[PaymentController::class,'payment'])->middleware(['auth', 'verified'])->name('payment');
   
@@ -73,16 +73,8 @@ Route::middleware(['admin'])->group(function(){
             Route::get('/{id}/edit', [ProductsController::class, 'edit']);
             Route::post('/save-item', [ProductsController::class, 'store'])->name('product.store');
             Route::post('/{id}/update', [ProductsController::class, 'update'])->name('product.update');
-            Route::delete('/delete/{id}', [ProductsController::class, 'delete'])->name('product.delete');
         });
-        Route::prefix('banners')->group(function(){
-            Route::get('/',[BannerController::class,'index'])->name('bannerControl');
-            Route::post('/save-item', [BannerController::class, 'store'])->name('banner.store');
-            Route::get('/{id}/edit', [BannerController::class, 'edit']);
-            Route::post('/{id}/update', [BannerController::class, 'update']);
-            Route::delete('/delete/{id}', [BannerController::class, 'delete']);
-            Route::post('/makeActive/{id}', [BannerController::class, 'makeActive']);
-        });
+        
     });
     Route::prefix('admin')->group(function () {
         Route::get('/about-us', [AboutUsController::class, 'list'])->name('admin.about.list');
@@ -92,12 +84,21 @@ Route::middleware(['admin'])->group(function(){
         Route::post('/about-us/toggle-status/{id}', [AboutUsController::class, 'toggleStatus']);
     });
 });
+Route::middleware(['admin'])->prefix('banners')->group(function(){
+    Route::get('/',[BannerController::class,'index'])->name('bannerControl');
+    Route::post('/save-item', [BannerController::class, 'store'])->name('banner.store');    
+    Route::get('/{id}/edit', [BannerController::class, 'edit']);
+    Route::post('/{id}/update', [BannerController::class, 'update']);
+    Route::delete('/delete/{id}', [BannerController::class, 'delete']);
+    Route::post('/makeActive/{id}', [BannerController::class, 'makeActive']);
+});
 
 
-   require __DIR__.'/tenant-auth.php';
+require __DIR__.'/tenant-auth.php';
 
-   
-   
-    
+
+Route::delete('/products/delete/{id}', [ProductsController::class, 'delete']);
+
+
 
 });

@@ -56,9 +56,9 @@ class ProductsController extends Controller
         
                 $img = $manager->read($request->file('image'));
                 $img->resize(800, 400);
-                $img->save(public_path('Upload/products/' . $name_gen));
+                $img->save(public_path('Upload/Products/' . $name_gen));
         
-                $save_url = 'Upload/products/' . $name_gen;
+                $save_url = 'Upload/Products/' . $name_gen;
             
                 $product = ProductsModel::create([
                     'name' => $request->name,
@@ -143,9 +143,9 @@ class ProductsController extends Controller
             $name_gen = uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
             $img = $manager->read($request->file('image'));
             $img->resize(800, 400);
-            $img->save(public_path('Upload/products/' . $name_gen));
+            $img->save(public_path('Upload/Products/' . $name_gen));
     
-            $save_url = 'Upload/products/' . $name_gen;
+            $save_url = 'Upload/Products/' . $name_gen;
             $product->image = $save_url;
         }
     

@@ -118,11 +118,11 @@
     </a>
   </li>
   <li>
-    <a href="{{ url('/dashboard/banners') }}" class="{{ request()->is('/dashboard/banners') ? 'active' : '' }}">
+    <a href="{{ url('/banners') }}" class="{{ request()->is('banners') ? 'active' : '' }}">
     <i class="fa-regular fa-calendar-check"></i><span>Banner Control</span>
     </a>
     <li>
-    <a href="{{url('admin/about-us')}}" class="{{ request()->is('admin/abuot-us') ? 'active' : '' }}">
+    <a href="{{url('admin/about-us')}}" class="{{ request()->is('admin/about-us') ? 'active' : '' }}">
       <i class="fas fa-cogs"></i><span>About Us Control</span>
     </a>
   </li>

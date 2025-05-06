@@ -11,7 +11,7 @@ class AboutUsController extends Controller
     public function index()
 {
     $about = AboutUs::where('status', true)->first();
-    // return view('front-end.AboutUs', compact('about'));
+    return view('app.front-end.AboutUs', compact('about'));
 }
     public function list()
     {

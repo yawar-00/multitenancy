@@ -189,7 +189,7 @@
         <img src="thumb4.png" alt="Thumb 4" class="thumb" />
       </div> -->
       <div class="main-image">
-        <img src="{{asset($product->image)}}" alt="NO Image" />
+        <img src="/Upload/Products/{{basename($product->image)}}" alt="NO Image" />
       </div>
     </div>
 

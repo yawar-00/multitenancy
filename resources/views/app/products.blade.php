@@ -108,7 +108,7 @@
                 <td>{{ $product->name }}</td>
                 <td>
                     @if($product->image)
-                    <img src="{{asset($product->image) }}" style="width: 120px; height: 60px; cursor:pointer;"
+                    <img src="/Upload/Products/{{basename($product->image)}}" style="width: 120px; height: 60px; cursor:pointer;"
                         class="product-img" alt="Image">
                     @else
                     No Image
@@ -367,22 +367,23 @@ $.ajax({
                 $('#editProductPrice').val(response.product.price);
                 // Set the image preview
                 if (response.product.image) {
-                    $('#edit-preview-image').attr('src', response.product.image).show();
-                } else {
-                    $('#edit-preview-image').hide();
-                }
+                     let imageUrl = response.product.image;
+                     imageUrl= imageUrl.split('/').pop();
+                    imageUrl = '/Upload/Products/'+imageUrl ;
+                    
+                $('#edit-preview-image').attr('src', imageUrl).show();
+            } else {
+                $('#edit-preview-image').hide();
+            }
                 $('#editProductModal').modal('show');
             }
         });
     });
-
     // Update Product AJAX
     $('#editProductForm').on('submit', function(e) {
     e.preventDefault();
-
     let productId = $('#editProductId').val();
     let formData = new FormData(this);
-
     $.ajax({
         url: `products/${productId}/update`,
         type: 'POST',

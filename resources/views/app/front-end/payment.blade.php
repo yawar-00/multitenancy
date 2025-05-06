@@ -121,7 +121,7 @@
 <div class="container">
   <div class="row">
     <div class="col-image">
-      <img src="{{ asset($product->image) }}" alt="Product Image">
+      <img src="/Upload/Products/{{ basename($product->image) }}" alt="Product Image">
     </div>
     <div class="col-details">
       <h2>Product Name: {{ $product->name }}</h2>

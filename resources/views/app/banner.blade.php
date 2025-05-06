@@ -66,7 +66,7 @@
                     <td>{{ $banner->id }}</td>
                     <td>
                         @if($banner->url)
-                        <img src="{{ asset($banner->url) }}" style="width: 120px; height: 60px; cursor:pointer;"
+                        <img src="/Upload/Banner/{{ basename($banner->url) }}" style="width: 120px; height: 60px; cursor:pointer;"
                             class="banner-img" alt="Image">
                         @else
                         No Image
@@ -136,59 +136,51 @@
     </div>
 
     <!-- Edit Product Modal -->
-    <div class="modal fade" id="editBannerModal" tabindex="-1" aria-labelledby="editBannerModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="editProductForm" enctype="multipart/form-data" class="modal-content">
-                <input type="hidden" name="product_id" id="editProductId">
+    <!-- Edit Banner Modal -->
+<div class="modal fade" id="editBannerModal" tabindex="-1" aria-labelledby="editBannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="editBannerForm" enctype="multipart/form-data">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editBannerModalLabel">Edit Product</h5>
+                    <h5 class="modal-title" id="editBannerModalLabel">Edit Banner</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label>Name:</label>
-                        <input type="text" name="name" id="editBannerName" class="form-control" required />
-                        <span class="text-danger error-text name_error"></span>
+                    <input type="hidden" id="editBannerId" name="id">
+                    <div class="mb-3">
+                        <label for="editBannerName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editBannerName" name="name">
                     </div>
-                    <div class="form-group mb-3">
-                        <label>Description:</label>
-                        <textarea name="description" id="editBannerDescription" class="form-control"
-                            required></textarea>
-                        <span class="text-danger error-text description_error"></span>
+
+                    <div class="mb-3">
+                        <label for="editBannerDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editBannerDescription" name="description"></textarea>
                     </div>
-                    <div class="form-group mb-3">
-                        <label>Category:</label>
-                        <select name="category" class="form-control" id="editBannerCategory" required>
-                            <option value="">-- Select Category --</option>
-                            <option value="1">Electronics</option>
-                            <option value="">Cosmetics</option>
+
+                    <div class="mb-3">
+                        <label for="editBannerCategory" class="form-label">Category</label>
+                        <select id="editBannerCategory" name="category_id" class="form-select">
+                            <!-- Load categories dynamically -->
                         </select>
-                        <span class="text-danger error-text category_error"></span>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label>Image:</label>
-
-                        <!-- Image preview -->
-                        <div id="image-preview" class="mb-2">
-                            <img id="edit-preview-image" src="" alt="Current Image"
-                                style="max-width: 200px; height: auto; display: none;" />
-                        </div>
-
-                        <!-- File input -->
-                        <input type="file" name="image" class="form-control" accept="image/*" />
-                        <span class="text-danger error-text image_error"></span>
+                    <div class="mb-3">
+                        <label for="editBannerImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="editBannerImage" name="image">
+                        <img id="edit-preview-image" src="" class="img-fluid mt-2" style="max-height: 150px; display: none;" />
                     </div>
-
                 </div>
+
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Update Product</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
-    <!-- Bootstrap Image Preview Modal -->
+</div>
+<!-- Bootstrap Image Preview Modal -->
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark">
@@ -205,6 +197,9 @@
         </div>
     </div>
 </div>
+<!-- Bootstrap JS (v5) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -232,7 +227,7 @@ $('#HeroForm').submit(function(e) {
     $('.error-text').text('');
 
     $.ajax({
-        url: "{{ url('/dashboard/banners/save-item') }}",
+        url: "{{ url('/banners/save-item') }}",
         type: "POST",
         data: formData,
         contentType: false,
@@ -301,29 +296,29 @@ $('#HeroForm').submit(function(e) {
     
         // Edit Banner AJAX - Load Banner Data into Modal
         $(document).on('click', '.editBannerBtn', function() {
-            let bannerId = $(this).data('id');
-            
-            $.ajax({
-                url: `banners/${bannerId}/edit`,
-                type: 'GET',
-                success: function(response) {
-                    $('#editBannerId').val(response.banner.id);
-                    $('#editBannerName').val(response.banner.name);
-                    $('#editBannerDescription').val(response.banner.description);
-                    $('#editBannerCategory').val(response.banner.category_id);
-                    // Set the image preview
-                    if (response.banner.image) {
-                        $('#edit-preview-image').attr('src', response.banner.image).show();
-                    } else {
-                        $('#edit-preview-image').hide();
-                    }
-                    $('#editBannerModal').modal('show');
-                }
-            });
-        });
+    let bannerId = $(this).data('id');
     
-        // Update Banner AJAX
-        $('#editBannerForm').on('submit', function(e) {
+    $.ajax({
+        url: `banners/${bannerId}/edit`,
+        type: 'GET',
+        success: function(response) {
+           
+            
+            $('#editBannerId').val(response.banner.id);
+            $('#editBannerDescription').val(response.banner.description);
+
+            if (response.banner.image) {
+                $('#edit-preview-image').attr('src', response.banner.image).show();
+            } else {
+                $('#edit-preview-image').hide();
+            }
+            $('#editBannerModal').show();
+        }
+    });
+});
+
+    // Update Banner AJAX
+    $('#editBannerForm').on('submit', function(e) {
         e.preventDefault();
 
         let bannerId = $('#editBannerId').val();
@@ -358,7 +353,10 @@ $('#HeroForm').submit(function(e) {
                 row.find('td:nth-child(2)').text(response.banner.name);
                 row.find('td:nth-child(3)').text(response.banner.description);
                 row.find('td:nth-child(4)').text(response.banner.category);
-                row.find('td:nth-child(5) img').attr('src', response.banner.image);
+                let imageUrl = response.product.image;
+                     imageUrl= imageUrl.split('/').pop();
+                    imageUrl = '/Upload/Banner/'+imageUrl ;
+                row.find('td:nth-child(5) img').attr('src', imageUrl);
             },
             error: function(xhr) {
                 if (xhr.status === 422) {
@@ -375,7 +373,7 @@ $('#HeroForm').submit(function(e) {
                 }
             }
         });
-         });
+    });
 
        // toggle 
 $(document).on('change', '.toggleStatus', function () {

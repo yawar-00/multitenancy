@@ -97,10 +97,14 @@
     <body style="background-color:#ECEFCA">
     @extends('app.layout-frontend.master')
     @section('content')
-        <div style="background-color:#ECEFCA; margin-top:50px">
+    <div style="background-color:#ECEFCA; margin-top:50px">
             
 
-           
+            <div id="hero">
+                <img id='heroImg'src="/Upload/Banner/{{basename($activeImage->url) }}" alt="">
+                <h1  id='heroText'>{{$activeImage->description}}</h1>
+
+            </div>
         </div>
         <div class="card-wrapper">
             <div class="card-grid">
@@ -115,7 +119,7 @@
                     @endphp
                     @foreach($products as $product)
                     @if($category->id == $product->category_id &&$i<5)
-                        <img src="{{ asset($product ->image) }}" alt="">
+                        <img src="/Upload/Products/{{ basename($product ->image) }}" alt="">
                             @php
                             $i++; 
                             @endphp

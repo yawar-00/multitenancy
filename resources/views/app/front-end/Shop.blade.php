@@ -104,7 +104,7 @@
     @foreach($products as $product)
     <div class="card custom-card">
     @if($product->image)
-        <img src="{{ asset($product->image) }}" class="product-img" alt="Image">
+        <img src="/Upload/Products/{{ basename($product->image) }}" class="product-img" alt="Image">
     @else
         <div class="no-img">No Image</div>
     @endif
