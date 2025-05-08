@@ -25,12 +25,13 @@ class ProductsController extends Controller
         $products = ProductsModel::with(['category'])->latest()->get();
         $product_used = ProductsModel::get()->count();
         $total_product = Subscription::latest()->first()->maxProducts;
-        
+        $categories = category::get();
+        // dd($categories);
         
       
 
         // dd($products);
-        return view('app.products', compact('products','product_used','total_product'));
+        return view('app.products', compact('products','product_used','total_product','categories'));
     }
 
 

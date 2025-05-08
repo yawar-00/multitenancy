@@ -97,15 +97,14 @@
     <body style="background-color:#ECEFCA">
     @extends('app.layout-frontend.master')
     @section('content')
+    @if($activeImage)
     <div style="background-color:#ECEFCA; margin-top:50px">
-            
-
-            <div id="hero">
+        <div id="hero">
                 <img id='heroImg'src="/Upload/Banner/{{basename($activeImage->url) }}" alt="">
                 <h1  id='heroText'>{{$activeImage->description}}</h1>
-
-            </div>
         </div>
+    </div>
+    @endif
         <div class="card-wrapper">
             <div class="card-grid">
             @foreach($categories as $category)

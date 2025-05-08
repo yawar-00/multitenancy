@@ -5,6 +5,7 @@ namespace App\Http\Controllers\app;
 use Razorpay\Api\Api;
 
 use App\Models\Banner;
+use App\Models\Review;
 use App\Models\category;
 use Illuminate\Http\Request;
 use App\Models\ProductsModel;
@@ -23,14 +24,18 @@ class FrontendController extends Controller
       return view('app.front-end.Shop',compact('products'));
    }
    public function shopByCategory($id){
+     
       $products = ProductsModel::where('category_id',$id)->latest()->get();
+     
       return view('app.front-end.Shop',compact('products'));
       
       
    }
    public function shopProduct($id){
       $product = ProductsModel::findOrFail($id);
-      return view('app.front-end.ShopProduct',compact('product'));
+      $reviews = Review::where('product_id',$id)->with('images')->get();
+      // dd($reviews);
+      return view('app.front-end.ShopProduct',compact('product','reviews'));
       
       
    }

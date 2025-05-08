@@ -2,11 +2,18 @@
 
 declare(strict_types=1);
 
+use Stripe\Stripe;
+
+use Illuminate\Http\Request;
+use App\Mail\PaymentSuccessMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\app\UserController;
 use App\Http\Controllers\app\adminController;
+use Stripe\Checkout\Session as StripeSession;
 use App\Http\Controllers\app\BannerController;
+use App\Http\Controllers\app\ReviewController;
 use App\Http\Controllers\app\AboutUsController;
 use App\Http\Controllers\app\PaymentController;
 use App\Http\Controllers\app\FrontendController;
@@ -40,7 +47,7 @@ Route::middleware([
     Route::get('/shopProduct/{id}',[FrontendController::class,'shopProduct']);
     Route::get('/about-us', [AboutUsController::class, 'index']);
     Route::get('/buynow/{id}',[FrontendController::class,'BuyNow'])->middleware(['auth', 'verified']);
-    Route::post('/razorpay',[PaymentController::class,'payment'])->middleware(['auth', 'verified'])->name('payment');
+    // Route::post('/razorpay',[PaymentController::class,'payment'])->middleware(['auth', 'verified'])->name('payment');
   
 
    Route::get('login',function(){
@@ -93,12 +100,44 @@ Route::middleware(['admin'])->prefix('banners')->group(function(){
     Route::post('/makeActive/{id}', [BannerController::class, 'makeActive']);
 });
 
+// stripe integration 
+// Route::get('success',[PaymentController::class,'success']);
+Route::post('/stripe/checkout', [PaymentController::class, 'checkout']);
 
-require __DIR__.'/tenant-auth.php';
+Route::get('/success', function (Request $request)
+{
+    $sessionId = $request->query('session_id');
 
+    if (!$sessionId) {
+        return redirect('/')->with('error', 'No session ID provided.');
+    }
+
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
+    $lineItems = \Stripe\Checkout\Session::allLineItems($sessionId, ['limit' => 1]);
+    $line = $lineItems->data[0] ?? null;
+
+    if ($line && auth()->check()) {
+        Mail::to(auth()->user()->email)->send(
+            new App\Mail\ProductPaymentSuccessMail(
+                $line->description ?? 'Product',
+                $session->amount_total / 100, // in INR
+                $line->quantity ?? 1
+            )
+        );
+    }
+
+
+    return view('ThankYou');
+});
+Route::post('/reviews/store', [ReviewController::class, 'store'])->middleware('auth');
 
 Route::delete('/products/delete/{id}', [ProductsController::class, 'delete']);
 
+
+require __DIR__.'/tenant-auth.php';
 
 
 });

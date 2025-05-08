@@ -161,11 +161,10 @@
                     <label>Category:</label>
                     <select name="category" class="form-control" required>
                         <option value="">-- Select Category --</option>
-                        <option value="1">Electronics</option>
-                        <option value="2">Cosmetics</option>
-                        <option value="3">Home Decor</option>
-                        <option value="4">Kitchen Item</option>
-                        <option value="5">Grocery</option>
+                        @foreach($categories as $category)
+                        <option value="{{$category->id}}">{{$category->category_name}}</option>
+                        @endforeach
+                        
                     </select>
                     <span class="text-danger error-text category_error"></span>
                 </div>
@@ -213,11 +212,9 @@
                     <label>Category:</label>
                     <select name="category" class="form-control" id="editProductCategory" required>
                         <option value="">-- Select Category --</option>
-                        <option value="1">Electronics</option>
-                        <option value="2">Cosmetics</option>
-                        <option value="3">Home Decor</option>
-                        <option value="4">Kitchen Item</option>
-                        <option value="5">Grocery</option>
+                        @foreach($categories as $category)
+                        <option value="{{$category->id}}">{{$category->category_name}}</option>
+                        @endforeach
                     </select>
                     <span class="text-danger error-text category_error"></span>
                 </div>

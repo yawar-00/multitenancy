@@ -1,5 +1,5 @@
+
 <style>
-    <style>
   body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -92,7 +92,7 @@
     margin-top: 20px;
   }
 
-  #rzp-button {
+  #stripe-button {
     background-color: #007bff;
     color: #fff;
     padding: 12px 25px;
@@ -104,7 +104,7 @@
     transition: background-color 0.3s ease;
   }
 
-  #rzp-button:hover {
+  #stripe-button:hover {
     background-color: #0056b3;
   }
 
@@ -115,7 +115,6 @@
   }
 </style>
 
-</style>
 <h2 class="text-center">Product Details</h2>
 
 <div class="container">
@@ -138,78 +137,41 @@
         Total Price: ₹<span id="total-price">{{ $product->price }}</span>
       </div>
 
-      <form action="{{ url('/razorpay')}}" method="POST" id="payment-form">
+      <form action="{{ url('/stripe/checkout') }}" method="POST" id="stripe-form">
         @csrf
         <input type="hidden" name="product_id" value="{{ $product->id }}">
         <input type="hidden" name="quantity" id="form-quantity" value="1">
         <input type="hidden" name="amount" id="form-amount" value="{{ $product->price * 100 }}">
-        <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
-        <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
-        <input type="hidden" name="razorpay_signature" id="razorpay_signature">
-
-        <button type="button" id="rzp-button">Pay Now</button>
+        <button type="submit" id="stripe-button">Pay with Stripe</button>
       </form>
     </div>
   </div>
 </div>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-  const qtyInput      = document.getElementById('quantity');
-  const totalDisplay  = document.getElementById('total-price');
-  const unitPrice     = parseFloat(document.getElementById('unit-price').textContent);
-  const btnPay        = document.getElementById('rzp-button');
-  const formQuantity  = document.getElementById('form-quantity');
-  const formAmount    = document.getElementById('form-amount');
+  const qtyInput     = document.getElementById('quantity');
+  const totalDisplay = document.getElementById('total-price');
+  const unitPrice    = parseFloat(document.getElementById('unit-price').textContent);
+  const formQuantity = document.getElementById('form-quantity');
 
   function updateTotals() {
-    const qty   = parseInt(qtyInput.value, 10);
+    const qty = parseInt(qtyInput.value, 10);
     const total = qty * unitPrice;
     totalDisplay.textContent = total.toFixed(2);
     formQuantity.value = qty;
-    formAmount.value   = Math.round(total * 100); // paise, integer
+   
   }
 
   function incrementQty() {
-    qtyInput.value = parseInt(qtyInput.value,10) + 1;
+    qtyInput.value = parseInt(qtyInput.value, 10) + 1;
     updateTotals();
   }
 
   function decrementQty() {
     if (qtyInput.value > 1) {
-      qtyInput.value = parseInt(qtyInput.value,10) - 1;
+      qtyInput.value = parseInt(qtyInput.value, 10) - 1;
       updateTotals();
     }
   }
-
-  btnPay.onclick = function(e) {
-    e.preventDefault();
-    const amountPaise = parseInt(formAmount.value, 10);
-
-    const options = {
-      key:        "{{ config('services.razorpay.key') }}",
-      amount:     amountPaise,
-      currency:   "INR",
-    name: "XYZ Store",
-      description: "Payment for {{ $product->name }}",
-      
-      handler: function (response) {
-        // fill hidden form fields and submit
-        document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
-        document.getElementById('razorpay_order_id').value   = response.razorpay_order_id;
-        document.getElementById('razorpay_signature').value  = response.razorpay_signature;
-        document.getElementById('payment-form').submit();
-      },
-      prefill: {
-        name: "XYZ STORE",
-        email: "{{ Auth::user()->email ?? '' }}",
-      },
-      theme: {
-        color: "#3399cc"
-      }
-    };
-    const rzp = new Razorpay(options);
-    rzp.open();
-  };
 </script>
 
